@@ -1,12 +1,16 @@
 <template>
   <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
+    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+      <el-form-item label="Activity name" prop="name">
         <el-input v-model="form.name"/>
       </el-form-item>
 
+      <el-form-item label="联系方式" prop="contactsPhone">
+        <el-input v-model="form.contactsPhone" placeholder="请输入联系方式"></el-input>
+      </el-form-item>
+
       <!-- 下拉框静态 -->
-      <el-form-item label="Activity zone">
+      <el-form-item label="Activity zone" prop="region">
         <el-select v-model="form.region" placeholder="please select your zone">
           <el-option label="上海" value="shanghai"/>
           <el-option label="北京" value="beijing"/>
@@ -17,7 +21,7 @@
       <el-form-item label="Activity zone2">
         <el-select v-model="form.value" placeholder="请选择">
           <el-option
-            v-for="item in form.options"
+            v-for="item in options"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -94,7 +98,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
+        <el-button type="primary" @click="onSubmit('form')">Create</el-button>
         <el-button @click="onCancel">Cancel</el-button>
       </el-form-item>
     </el-form>
@@ -102,8 +106,16 @@
 </template>
 
 <script>
+import { validatePhone } from '@/utils/validate'
 export default {
   data() {
+    var validatePhoneNo = (rule, value, callback) => {
+      if(!validatePhone(value)) {
+        callback(new Error('手机号不存在'));
+      } else {
+        callback();
+      }
+    };
     return {
       radioList: [
         {
@@ -124,10 +136,7 @@ export default {
       editorOption: {
         // some quill options
       },
-      form: {
-        name: '',
-        region: '',
-        options: [{
+      options: [{
           value: '',
           label: '全部'
         }, {
@@ -142,7 +151,11 @@ export default {
         }, {
           value: '选项5',
           label: '北京烤鸭'
-        }],
+      }],
+      form: {
+        name: 'aaa',
+        contactsPhone: '13856321452',
+        region: '',
         value: '',
         date1: '',
         date2: '',
@@ -151,6 +164,18 @@ export default {
         type: [],
         resource: '',
         desc: ''
+      },
+      rules: {
+        name: [
+          {required: true, message: '必填', trigger: 'blur'}
+        ],
+        contactsPhone: [
+          { required: true, message: '请输入联系方式', trigger: 'blur' },
+          { validator: validatePhoneNo, trigger: 'blur'}
+        ],
+        region: [
+          {required: true, message: '请选择活动区域', trigger: 'change'}
+        ]
       }
     }
   },
@@ -160,8 +185,17 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
-      this.$message('submit!')
+    onSubmit(formName) {
+      // this.$message('submit!')
+      this.$refs[formName].validate((valid) => {
+        if(valid) {
+          let forms = this.form;
+          console.log(111, { forms })
+          console.log(222, { ...this.form })
+        } else {
+          return false
+        }
+      })
     },
     onCancel() {
       this.$message({
@@ -170,18 +204,18 @@ export default {
       })
     },
 
+    // 失去焦点
     onEditorBlur(quill) {
-      console.log('editor blur!', quill)
     },
+    // 获取焦点
     onEditorFocus(quill) {
-      console.log('editor focus!', quill)
     },
     onEditorReady(quill) {
       console.log('editor ready!', quill)
     },
     onEditorChange({ quill, html, text }) {
       console.log('editor change!', quill, html, text)
-      this.content = html
+      // this.content = html
     }
   },
   mounted() {
