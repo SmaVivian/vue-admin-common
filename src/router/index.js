@@ -70,7 +70,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: '表单', icon: 'form' }
       }
     ]
   },
@@ -86,19 +86,21 @@ export const asyncRouterMap = [
         path: 'index',
         name: 'ListIndex',
         component: () => import('@/views/list/index'),
-        meta: { title: 'ListIndex', icon: 'form' }
+        meta: { title: '列表', icon: 'form' }
       },
       {
         path: 'detail',
         name: 'ListDetail',
         component: () => import('@/views/list/detail'),
-        meta: { title: 'ListDetail', icon: 'form' }
+        meta: { title: 'ListDetail', icon: 'form' },
+        hidden: true
       },
       {
         path: 'edit',
         name: 'ListEdit',
         component: () => import('@/views/list/edit'),
-        meta: { title: 'ListEdit', icon: 'form' }
+        meta: { title: 'ListEdit', icon: 'form' },
+        hidden: true
       },
     ]
   },

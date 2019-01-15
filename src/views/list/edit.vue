@@ -4,12 +4,6 @@
       <div class="createPost-main-container">
         <el-row>
           <el-col :span="24">
-            <!-- <el-form-item style="margin-bottom: 40px;" prop="title">
-              <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
-                标题
-              </MDinput>
-            </el-form-item> -->
-
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
@@ -49,18 +43,18 @@
           </el-col>
         </el-row>
 
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="postForm.title"/>
+        </el-form-item>
+
+        <el-form-item label="内容" prop="content">
+          <el-input v-model="postForm.content"/>
+        </el-form-item>
+
         <el-form-item style="margin-bottom: 40px;" label-width="45px" label="摘要:">
           <el-input :rows="1" v-model="postForm.content_short" type="textarea" class="article-textarea" autosize placeholder="请输入内容"/>
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}字</span>
         </el-form-item>
-
-        <div class="editor-container">
-          <!-- <Tinymce ref="editor" :height="400" v-model="postForm.content" /> -->
-        </div>
-
-        <div style="margin-bottom: 20px;">
-          <!-- <Upload v-model="postForm.image_uri" /> -->
-        </div>
 
         <el-form-item>
           <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">发布
@@ -110,21 +104,7 @@ export default {
         callback()
       }
     }
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validateURL(value)) {
-          callback()
-        } else {
-          this.$message({
-            message: '外链url填写不正确',
-            type: 'error'
-          })
-          callback(new Error('外链url填写不正确'))
-        }
-      } else {
-        callback()
-      }
-    }
+    
     return {
       postForm: Object.assign({}, defaultForm),
       loading: false,
@@ -132,46 +112,33 @@ export default {
       rules: {
         image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+        content: [{ validator: validateRequire }]
       }
     }
   },
   computed: {
     contentShortLength() {
       return this.postForm.content_short.length
-    },
-    lang() {
-      return this.$store.getters.language
     }
   },
   created() {
-    if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
-      this.fetchData(id)
+    if (this.$route.query.id) {
+      // const id = this.$route.query && this.$route.query.id
+      this.fetchData()
     } else {
       this.postForm = Object.assign({}, defaultForm)
     }
   },
   methods: {
-    fetchData(id) {
-      // fetchArticle(id).then(response => {
-      //   this.postForm = response.data
-      //   // Just for test
-      //   this.postForm.title += `   Article Id:${this.postForm.id}`
-      //   this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
-      //   // Set tagsview title
-      //   this.setTagsViewTitle()
-      // }).catch(err => {
-      //   console.log(err)
-      // })
+    fetchData() {
+      getDetail({
+        id: this.$route.query.id
+      }).then(res => {
+        this.postForm.title = res.data.title
+        this.postForm.content = res.data.detail
+      })
     },
-    setTagsViewTitle() {
-      const title = this.lang === 'zh' ? '编辑文章' : 'Edit Article'
-      const route = Object.assign({}, this.$route, { title: `${title}-${this.postForm.id}` })
-      this.$store.dispatch('updateVisitedView', route)
-    },
+    // 保存
     submitForm() {
       this.postForm.display_time = parseInt(this.display_time / 1000)
       console.log(this.postForm)
@@ -192,6 +159,7 @@ export default {
         }
       })
     },
+    // 草稿
     draftForm() {
       console.log(this.postForm)
       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
@@ -232,17 +200,6 @@ export default {
       margin-bottom: 10px;
       .postInfo-container-item {
         float: left;
-      }
-    }
-    .editor-container {
-      min-height: 500px;
-      margin: 0 0 30px;
-      .editor-upload-btn-container {
-        text-align: right;
-        margin-right: 10px;
-        .editor-upload-btn {
-          display: inline-block;
-        }
       }
     }
   }

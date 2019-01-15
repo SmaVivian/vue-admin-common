@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-      <el-form-item label="Activity name" prop="name">
+      <el-form-item label="姓名" prop="name">
         <el-input v-model="form.name"/>
       </el-form-item>
 
@@ -10,15 +10,15 @@
       </el-form-item>
 
       <!-- 下拉框静态 -->
-      <el-form-item label="Activity zone" prop="region">
-        <el-select v-model="form.region" placeholder="please select your zone">
+      <el-form-item label="地区" prop="region">
+        <el-select v-model="form.region" placeholder="请选择">
           <el-option label="上海" value="shanghai"/>
           <el-option label="北京" value="beijing"/>
         </el-select>
       </el-form-item>
 
       <!-- 下拉框动态渲染 -->
-      <el-form-item label="Activity zone2">
+      <el-form-item label="地区2">
         <el-select v-model="form.value" placeholder="请选择">
           <el-option
             v-for="item in options"
@@ -30,7 +30,7 @@
       </el-form-item>
 
       <!-- 日期/时间 -->
-      <el-form-item label="Activity time">
+      <el-form-item label="时间">
         <el-col :span="11">
           <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;"/>
         </el-col>
@@ -41,18 +41,18 @@
       </el-form-item>
 
       <!-- switch开关 -->
-      <el-form-item label="Instant delivery">
+      <el-form-item label="开关">
         <el-switch v-model="form.delivery"/>
       </el-form-item>
 
       <!-- 单选框 -->
-      <el-form-item label="Resources">
+      <el-form-item label="单选框">
         <el-radio-group v-model="form.resource">
           <el-radio label="Sponsor"/>
           <el-radio label="Venue"/>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="单选框">
+      <el-form-item label="单选框2">
         <el-radio-group v-model="form.radio">
           <el-radio 
             v-for="item in radioList"
@@ -62,7 +62,7 @@
       </el-form-item>
 
       <!-- 复选框 -->
-      <el-form-item label="Activity type">
+      <el-form-item label="复选框">
         <el-checkbox-group v-model="form.type">
           <el-checkbox label="Online activities" name="type"/>
           <el-checkbox label="Promotion activities" name="type"/>
@@ -72,7 +72,7 @@
       </el-form-item>
 
       <!-- 文本域 -->
-      <el-form-item label="Activity form">
+      <el-form-item label="文本域">
         <el-input v-model="form.desc" type="textarea"/>
       </el-form-item>
 
@@ -106,8 +106,15 @@
 </template>
 
 <script>
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
+import { quillEditor } from 'vue-quill-editor';
 import { validatePhone } from '@/utils/validate'
 export default {
+  components: {
+    quillEditor
+  },
   data() {
     var validatePhoneNo = (rule, value, callback) => {
       if(!validatePhone(value)) {
@@ -181,6 +188,7 @@ export default {
   },
   computed: {
     editor() {
+      console.log(1111111111111)
       return this.$refs.myQuillEditor.quill
     }
   },
