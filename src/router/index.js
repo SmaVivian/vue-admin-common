@@ -76,6 +76,34 @@ export const asyncRouterMap = [
   },
 
   {
+    path: '/list',
+    component: Layout,
+    redirect: '/list/index',
+    name: 'List',
+    meta: { title: '列表', icon: 'example' },
+    children: [
+      {
+        path: 'index',
+        name: 'ListIndex',
+        component: () => import('@/views/list/index'),
+        meta: { title: 'ListIndex', icon: 'form' }
+      },
+      {
+        path: 'detail',
+        name: 'ListDetail',
+        component: () => import('@/views/list/detail'),
+        meta: { title: 'ListDetail', icon: 'form' }
+      },
+      {
+        path: 'edit',
+        name: 'ListEdit',
+        component: () => import('@/views/list/edit'),
+        meta: { title: 'ListEdit', icon: 'form' }
+      },
+    ]
+  },
+
+  {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
