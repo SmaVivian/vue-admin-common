@@ -74,10 +74,13 @@ a:hover {
 }
 
 .app-container {
+  margin: 20px;
   padding: 20px;
+  background: #fff;
 }
 
 //pagination全局样式
 .pagination-container {
-  margin-top: 30px;
+  padding: 20px;
+  text-align: center;
 }

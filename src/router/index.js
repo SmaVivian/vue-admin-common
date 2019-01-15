@@ -41,30 +41,40 @@ export const constantRouterMap = [
 
 export const asyncRouterMap = [
   {
-    path: '/example',
+    path: '/list',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/list/index',
+    name: 'List',
+    meta: { title: '列表', icon: 'table' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'index',
+        name: 'ListIndex',
+        component: () => import('@/views/list/index'),
+        meta: { title: '列表', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree', roles: ['admin'] }  // 角色 admin
-      }
+        path: 'detail',
+        name: 'ListDetail',
+        component: () => import('@/views/list/detail'),
+        meta: { title: '详情', icon: 'form' },
+        hidden: true
+      },
+      {
+        path: 'edit',
+        name: 'ListEdit',
+        component: () => import('@/views/list/edit'),
+        meta: { title: '编辑', icon: 'form' },
+        hidden: true
+      },
     ]
   },
-
   {
     path: '/form',
     component: Layout,
+    redirect: '/form/index',
+    name: 'formAbout',
+    meta: { title: '表单相关', icon: 'example' },
     children: [
       {
         path: 'index',
@@ -74,44 +84,25 @@ export const asyncRouterMap = [
       }
     ]
   },
-
   {
-    path: '/list',
+    path: '/example',
     component: Layout,
-    redirect: '/list/index',
-    name: 'List',
-    meta: { title: '列表', icon: 'example' },
     children: [
       {
-        path: 'index',
-        name: 'ListIndex',
-        component: () => import('@/views/list/index'),
-        meta: { title: '列表', icon: 'form' }
-      },
-      {
-        path: 'detail',
-        name: 'ListDetail',
-        component: () => import('@/views/list/detail'),
-        meta: { title: 'ListDetail', icon: 'form' },
-        hidden: true
-      },
-      {
-        path: 'edit',
-        name: 'ListEdit',
-        component: () => import('@/views/list/edit'),
-        meta: { title: 'ListEdit', icon: 'form' },
-        hidden: true
-      },
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('@/views/tree/index'),
+        meta: { title: '树', icon: 'tree', roles: ['admin'] }  // 角色 admin
+      }
     ]
   },
-
   {
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
     name: 'Nested',
     meta: {
-      title: 'Nested',
+      title: '多级菜单',
       icon: 'nested'
     },
     children: [
@@ -169,7 +160,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        meta: { title: '外链', icon: 'link' }
       }
     ]
   },
